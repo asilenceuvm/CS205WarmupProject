@@ -1,5 +1,6 @@
 import sqlite3
 import csv
+import os
 
 def main():
     #connect to database
@@ -9,15 +10,23 @@ def main():
     #create cursor to execute SQL commands
     c=connection.cursor()
 
-    inputFile = csv.DictReader(open("CS205 warmup songsDB.csv"))
-    inputFile2= csv.DictReader(open("CS205 warmup artistsDB.csv"))
+    inputFile = csv.DictReader(open("songsDB.csv"))
+    inputFile2= csv.DictReader(open("artistsDB.csv"))
 
     #create table
-    c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData 
-        (Rank,TrackName,Streams,TrackId,ArtistId)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData (
+        Rank int,
+        TrackName varchar(255),
+        Tempo float,
+        Streams int,
+        ArtistId varchar)''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS spotifyArtistData 
-            (I,Artist,ArtistPopularity,ArtistFollowers,ArtistId)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS spotifyArtistData (
+        pmkArtist int AUTO_INCREMENT,
+        Artist varchar(255),
+        ArtistPopularity varchar(255),
+        ArtistFollowers varchar(255),
+        ArtistId int)''')
 
     table1="spotifySongData"
     table2="spotifyArtistData"
@@ -26,19 +35,18 @@ def main():
     for row in inputFile:
         #parse values from table
         rank=float(row['Rank'])
-        trackId=row['Track_id']
+        tempo=float(row['Tempo'])
         streams=int(row['Streams'])
         trackName=row['Track Name']
         artistId=row['Artist_id']
 
-        c.execute("INSERT INTO spotifySongData (Rank,TrackName,Streams,TrackId,ArtistId) VALUES(?,?,?,?,?)",
-                  (rank, trackName, streams, trackId, artistId))
+        c.execute("INSERT INTO spotifySongData (Rank,TrackName,Streams,ArtistId) VALUES(?,?,?,?)",
+                  (rank, trackName, streams, artistId))
         connection.commit()
 
     printDbTable(c, table1)
     print("")
 
-    i=1
     #populate DB table2
     for row in inputFile2:
         artist = row['Artist']
@@ -46,10 +54,10 @@ def main():
         followers = int(row['Artist_follower'])
         artistId2 = row['Artist_id']
 
-        c.execute("INSERT INTO spotifyArtistData (I, Artist,ArtistPopularity,ArtistFollowers,ArtistId) VALUES(?,?,?,?,?)",
-                  (i,artist, popularity, followers, artistId2))
+        c.execute("INSERT INTO spotifyArtistData (Artist,ArtistPopularity,ArtistFollowers,ArtistId) VALUES(?,?,?,?)",
+                  (artist, popularity, followers, artistId2))
         connection.commit()
-        i+=1
+
 
     print("")
     printDbTable(c, table2)
@@ -70,7 +78,7 @@ def printDbTable(c, db):
     rows=c.fetchall()
 
     for row in rows:
-        print row
+        print(row)
 
 main()
 

@@ -1,4 +1,4 @@
-validQueries = ['help', 'song', 'artist', 'quit']
+validQueries = ['help', 'song', 'artist', 'quit', 'load_database']
 
 def main():
     print("Welcome to the spotify database searching tool, for help type 'help'")
@@ -23,6 +23,8 @@ def main():
                 getSong(query[1])
             elif queryType == "artist":
                 getArtist(query[1])
+            elif queryType == "load_database":
+                print("TODO: load database")
             
             query = input(">> ")
             query = query.split()
@@ -39,6 +41,10 @@ def getSong(song):
 # get top x songs
 def getTopX(x):
     print("top " + x)
+
+#get top song of one artist
+def getTopSong(artist):
+    print(artist)
 
 
 main()

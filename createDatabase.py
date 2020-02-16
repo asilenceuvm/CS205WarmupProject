@@ -3,9 +3,10 @@ import csv
 import os
 
 def main():
-    #connect to database
+    # remove database to prevent errors
     if os.path.exists("spotifyDatabase.db"):
         os.remove("spotifyDatabase.db")
+    # connect to database
     connection=sqlite3.connect('spotifyDatabase.db')
     connection.text_factory = str
 

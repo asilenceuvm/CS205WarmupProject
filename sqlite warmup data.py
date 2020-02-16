@@ -9,8 +9,8 @@ def main():
     #create cursor to execute SQL commands
     c=connection.cursor()
 
-    inputFile = csv.DictReader(open("/Users/derrickleger/CS205WarmupProject/CS205 warmup songsDB.csv"))
-    inputFile2= csv.DictReader(open("/Users/derrickleger/CS205WarmupProject/CS205 warmup artistsDB.csv"))
+    inputFile = csv.DictReader(open("CS205 warmup songsDB.csv"))
+    inputFile2= csv.DictReader(open("CS205 warmup artistsDB.csv"))
 
     #create table
     c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData 

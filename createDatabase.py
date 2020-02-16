@@ -4,6 +4,8 @@ import os
 
 def main():
     #connect to database
+    if os.path.exists("spotifyDatabase.db"):
+        os.remove("spotifyDatabase.db")
     connection=sqlite3.connect('spotifyDatabase.db')
     connection.text_factory = str
 
@@ -22,7 +24,7 @@ def main():
         ArtistId text)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS spotifyArtistData (
-        pmkArtist int AUTO_INCREMENT,
+        pmkArtist INTEGER PRIMARY KEY AUTOINCREMENT,
         Artist text,
         ArtistPopularity text,
         ArtistFollowers text,
@@ -44,8 +46,7 @@ def main():
                   (rank, trackName, tempo, streams, artistId))
         connection.commit()
 
-    printDbTable(c, table1)
-    print("")
+
 
     #populate DB table2
     for row in inputFile2:
@@ -58,10 +59,10 @@ def main():
                   (artist, popularity, followers, artistId2))
         connection.commit()
 
-
+    printDbTable(c, table1)
     print("")
     printDbTable(c, table2)
-
+    print("")
     #close connection to DB
     connection.close()
 

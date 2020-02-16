@@ -17,18 +17,18 @@ def main():
 
     #create table
     c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData (
-        Rank int,
-        Streams int,
-        TrackName text,
-        Tempo real,
-        ArtistId text)''')
+        Rank INT,
+        Streams INT,
+        TrackName TEXT,
+        Tempo REAL,
+        ArtistId TEXT)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS spotifyArtistData (
         pmkArtist INTEGER PRIMARY KEY AUTOINCREMENT,
-        Artist text,
-        ArtistPopularity text,
-        ArtistFollowers text,
-        ArtistId int)''')
+        Artist TEXT,
+        ArtistPopularity TEXT,
+        ArtistFollowers TEXT,
+        ArtistId INT)''')
 
     table1="spotifySongData"
     table2="spotifyArtistData"

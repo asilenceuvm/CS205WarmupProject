@@ -16,16 +16,16 @@ def main():
     #create table
     c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData (
         Rank int,
-        TrackName varchar(255),
+        TrackName text,
         Tempo real,
         Streams int,
-        ArtistId varchar)''')
+        ArtistId text)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS spotifyArtistData (
         pmkArtist int AUTO_INCREMENT,
-        Artist varchar(255),
-        ArtistPopularity varchar(255),
-        ArtistFollowers varchar(255),
+        Artist text,
+        ArtistPopularity text,
+        ArtistFollowers text,
         ArtistId int)''')
 
     table1="spotifySongData"

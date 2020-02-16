@@ -17,7 +17,7 @@ def main():
     c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData (
         Rank int,
         TrackName varchar(255),
-        Tempo float,
+        Tempo real,
         Streams int,
         ArtistId varchar)''')
 

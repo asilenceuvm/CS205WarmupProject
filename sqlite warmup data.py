@@ -16,9 +16,9 @@ def main():
     #create table
     c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData (
         Rank int,
+        Streams int,
         TrackName text,
         Tempo real,
-        Streams int,
         ArtistId text)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS spotifyArtistData (
@@ -40,8 +40,8 @@ def main():
         trackName=row['Track Name']
         artistId=row['Artist_id']
 
-        c.execute("INSERT INTO spotifySongData (Rank,TrackName,Streams,ArtistId) VALUES(?,?,?,?)",
-                  (rank, trackName, streams, artistId))
+        c.execute("INSERT INTO spotifySongData (Rank,TrackName,Tempo, Streams,ArtistId) VALUES(?,?,?,?,?)",
+                  (rank, trackName, tempo, streams, artistId))
         connection.commit()
 
     printDbTable(c, table1)

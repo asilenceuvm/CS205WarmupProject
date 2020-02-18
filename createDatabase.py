@@ -1,38 +1,37 @@
-import sqlite3
+import sqlite3 as lite
 import csv
 import os
 
+
 def main():
-    # remove database to prevent errors
+    # to prevent errors when running more than once, delete previously created db.
     if os.path.exists("spotifyDatabase.db"):
         os.remove("spotifyDatabase.db")
+
     # connect to database
-    connection=sqlite3.connect('spotifyDatabase.db')
-    connection.text_factory = str
+    conn=lite.connect('spotifyDatabase.db')
+    conn.text_factory = str
 
     #create cursor to execute SQL commands
-    c=connection.cursor()
+    c=conn.cursor()
 
     inputFile = csv.DictReader(open("songsDB.csv"))
     inputFile2= csv.DictReader(open("artistsDB.csv"))
-
     #create table
-    c.execute('''CREATE TABLE IF NOT EXISTS spotifySongData (
+    c.execute('''CREATE TABLE IF NOT EXISTS tblSongs (
         Rank INT,
-        Streams INT,
         TrackName TEXT,
         Tempo REAL,
+        Streams INT,
         ArtistId TEXT)''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS spotifyArtistData (
+    c.execute('''CREATE TABLE IF NOT EXISTS tblArtists (
         pmkArtist INTEGER PRIMARY KEY AUTOINCREMENT,
         Artist TEXT,
         ArtistPopularity TEXT,
         ArtistFollowers TEXT,
         ArtistId INT)''')
 
-    table1="spotifySongData"
-    table2="spotifyArtistData"
 
     #populate DB table1
     for row in inputFile:
@@ -43,9 +42,9 @@ def main():
         trackName=row['Track Name']
         artistId=row['Artist_id']
 
-        c.execute("INSERT INTO spotifySongData (Rank,TrackName,Tempo, Streams,ArtistId) VALUES(?,?,?,?,?)",
+        c.execute("INSERT INTO tblSongs (Rank,TrackName,Tempo, Streams,ArtistId) VALUES(?,?,?,?,?)",
                   (rank, trackName, tempo, streams, artistId))
-        connection.commit()
+        conn.commit()
 
 
 
@@ -56,31 +55,11 @@ def main():
         followers = int(row['Artist_follower'])
         artistId2 = row['Artist_id']
 
-        c.execute("INSERT INTO spotifyArtistData (Artist,ArtistPopularity,ArtistFollowers,ArtistId) VALUES(?,?,?,?)",
+        c.execute("INSERT INTO tblArtists (Artist,ArtistPopularity,ArtistFollowers,ArtistId) VALUES(?,?,?,?)",
                   (artist, popularity, followers, artistId2))
-        connection.commit()
+        conn.commit()
 
-    printDbTable(c, table1)
-    print("")
-    printDbTable(c, table2)
-    print("")
-    #close connection to DB
-    connection.close()
+    conn.close()
 
-
-def printDbTable(c, db):
-    #literally selects data with your cursor
-    if(db=="spotifySongData"):
-        c.execute("SELECT * FROM spotifySongData")
-
-    if(db=="spotifyArtistData"):
-        c.execute("SELECT * FROM spotifyArtistData")
-
-    #rows is equal to everything selected by your cursor
-    rows=c.fetchall()
-
-    for row in rows:
-        print(row)
 
 main()
-

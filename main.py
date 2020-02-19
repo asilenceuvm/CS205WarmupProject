@@ -1,6 +1,7 @@
 import createDatabase
 import sqlite3 as lite
 
+
 validQueries = ['help', 'song', 'artist', 'quit']
 db_file = "spotifyDatabase.db"
 
@@ -71,9 +72,15 @@ def select_top_x(conn, x):
 
 
 def main():
+    # create database.
+    print("Creating database...")
+    createDatabase.main()
+    print("Done!")
     # connect to database.
     conn = create_connection(db_file)
-    select_top_x(conn, 100)
+
+    #example: always pass 'conn' to the methods.
+    select_top_x(conn, 10)
     '''
     print("Welcome to the spotify database searching tool, for help type 'help'")
 
@@ -101,21 +108,7 @@ def main():
             query = input(">> ")
             query = query.split()
             queryType = query[0]
+
     '''
-
-# get all songs by artist
-def getArtist(artist):
-    print(artist)
-
-
-# rank, times streamed, track id
-def getSong(song):
-    createDatabase.getSong(song)
-
-
-# get top x songs
-def getTopX(x):
-    print("top " + x)
-
 
 main()

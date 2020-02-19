@@ -60,10 +60,20 @@ def select_by_artist(conn, artist):
             print('{:<5} {:60} {:5}'.format(row[0], row[1], row[2]))
 
 
+def select_top_x(conn, x):
+    cur = conn.cursor()
+
+    cur.execute('SELECT Rank, TrackName FROM tblSongs WHERE Rank <= '+ str(x))
+    rows = cur.fetchall()
+    print('{:<5} {}'.format("Rank", "Song"))
+    for row in rows:
+        print('{:<5} {}'.format(row[0],row[1]))
+
+
 def main():
     # connect to database.
     conn = create_connection(db_file)
-    select_by_artist(conn, "Dua Lipa")
+    select_top_x(conn, 100)
     '''
     print("Welcome to the spotify database searching tool, for help type 'help'")
 

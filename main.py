@@ -31,7 +31,24 @@ def print_table(conn, tableName):
         print(row)
 
 
+def select_by_song_name(conn, song):
+    cur = conn.cursor()
+
+    cur.execute('SELECT tblArtists.Artist,tblSongs.Streams,tblSongs.Rank FROM '
+                'tblSongs INNER JOIN tblArtists ON tblSongs.ArtistId = tblArtists.ArtistId WHERE TrackName = "' + song + '"')
+    rows= cur.fetchall()
+
+    if len(rows) == 0:
+        print("No match was found.")
+    else:
+        print('"' + song + '" by',rows[0][0],"has been streamed", rows[0][1], "times and ranks number", rows[0][2], "globally.")
+
+
+
 def main():
+    conn = create_connection(db_file)
+    select_by_song_name(conn, "Sweet but Psycho")
+    '''
     print("Welcome to the spotify database searching tool, for help type 'help'")
 
     query = input(">> ")
@@ -58,7 +75,7 @@ def main():
             query = input(">> ")
             query = query.split()
             queryType = query[0]
-
+    '''
 
 # get all songs by artist
 def getArtist(artist):

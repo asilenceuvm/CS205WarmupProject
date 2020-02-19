@@ -1,5 +1,6 @@
 import createDatabase
 import sqlite3 as lite
+import os
 
 
 validQueries = ['help', 'song', 'artist', 'quit']
@@ -71,11 +72,18 @@ def select_top_x(conn, x):
         print('{:<5} {}'.format(row[0],row[1]))
 
 
-def main():
+def load_database():
     # create database.
     print("Creating database...")
     createDatabase.main()
     print("Done!")
+
+
+def main():
+    if os.path.exists("spotifyDatabase.db"):
+        print("Database loaded.")
+    else:
+        load_database()
     # connect to database.
     conn = create_connection(db_file)
 

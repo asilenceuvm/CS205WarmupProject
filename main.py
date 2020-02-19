@@ -44,10 +44,26 @@ def select_by_song_name(conn, song):
         print('"' + song + '" by',rows[0][0],"has been streamed", rows[0][1], "times and ranks number", rows[0][2], "globally.")
 
 
+def select_by_artist(conn, artist):
+    cur = conn.cursor()
+
+    cur.execute('SELECT ArtistId FROM tblArtists WHERE Artist ="' + artist + '"')
+    artist_id = cur.fetchall()
+    cur.execute('SELECT Rank, TrackName, Streams FROM tblSongs WHERE ArtistId ="' + artist_id[0][0] + '"')
+    rows = cur.fetchall()
+    if len(rows) == 0:
+        print('no match.')
+    else:
+        print(artist, "has the following songs in our database:\n")
+        print('{:<5} {:60} {:5}'.format("Rank", "Song", "Views"))
+        for row in rows:
+            print('{:<5} {:60} {:5}'.format(row[0], row[1], row[2]))
+
 
 def main():
+    # connect to database.
     conn = create_connection(db_file)
-    select_by_song_name(conn, "Sweet but Psycho")
+    select_by_artist(conn, "Dua Lipa")
     '''
     print("Welcome to the spotify database searching tool, for help type 'help'")
 

@@ -1,14 +1,14 @@
 import sqlite3 as lite
 import csv
 import os
+import re
 
 
-validQueries = ['help', 'song', 'artist', 'quit']
+validQueries = ['help', 'song', 'artist', 'quit', 'popularity', 'tempo', 'popularity' ,'followers', 'load_database']
 db_file = "spotifyDatabase.db"
 
 
 def load_database():
-
     # check if already created
     if os.path.exists("spotifyDatabase.db"):
         print("Created database.") # you can change this if u want
@@ -190,42 +190,55 @@ def select_top_x(conn, x):
 
 def main():
 
-    load_database()
-
-    # connect to database.
-    conn = create_connection(db_file)
-
-
-    # example: always pass 'conn' to the methods.
-    select_song_artist(conn, "IDGAF")
-    '''
     print("Welcome to the spotify database searching tool, for help type 'help'")
 
     query = input(">> ")
-    query = query.split()
-    queryType = query[0]
+    query = re.findall(r'\w+|\"\w+\s+\w+\"', query)
+    query = [x.strip('"') for x in query]
 
-    while queryType != "quit":
-        while queryType not in validQueries:
+    while query[0] != "quit":
+        #check query is valid
+        while query[0] not in validQueries:
             print("Ivalid Query, please try again")
             query = input(">> ")
-            query = query.split()
-            queryType = query[0]
+            query = re.findall(r'\w+|\"\w+\s+\w+\"', query)
+            query = [x.strip('"') for x in query]
 
-        if queryType == "quit":
+        #query is quit
+        if query[0] == "quit":
             print("Thank you for using our program")
-        else:
-            if queryType == "help":
-                print("TODO: create help output")
-            elif queryType == "song":
-                getSong(query[1])
-            elif queryType == "artist":
-                getArtist(query[1])
+        elif query[0] == "load_database":
+            if os.path.isfile(db_file):
+               load_database()
+            conn = create_connection(db_file)
+        elif query[0] == "help":
+            print("song popularity ...")
+            print("song artist ...")
+            print("song tempo ...")
+            print("artist popularity ...")
+            print("artist followers ...")
+            print("artist  ...")
+        try:
+            if query[0] == "song":
+                if query[1] == "popularity": 
+                    select_song_pop(conn, query[2])
+                elif query[1] == "artist": 
+                    select_song_artist(conn, query[2])
+                elif query[1] == "tempo":
+                    select_tempo(conn, query[2])
+            elif query[0] == "artist":
+                if query[1] == "popularity":
+                    select_artist_pop(conn, query[2])
+                elif query[1] == "followers":
+                    select_followers(conn, query[2])
+                else:
+                    select_by_artist(conn, query[1])
+        except:
+            print("Error in query")
 
-            query = input(">> ")
-            query = query.split()
-            queryType = query[0]
+        query = input(">> ")
+        query = re.findall(r'\w+|\"\w+\s+\w+\"', query)
+        query = [x.strip('"') for x in query]
 
-    '''
 
 main()

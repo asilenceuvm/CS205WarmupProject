@@ -9,6 +9,10 @@ db_file = "spotifyDatabase.db"
 
 
 def load_database():
+    """
+       Creates database, creates tables and populates them
+       :return:
+       """
     # check if already created
     if os.path.exists("spotifyDatabase.db"):
         print("Created database.") # you can change this if u want
@@ -85,6 +89,7 @@ def print_table(conn, tableName):
     """
        Query all rows in the given table
        :param conn: the Connection object
+       :param tableName: name of table in db
        :return:
        """
     cur = conn.cursor()
@@ -97,7 +102,12 @@ def print_table(conn, tableName):
 
 
 def select_song_pop(conn, song):
-    # song popularity 'songName'
+    """
+       Query to select song popularity
+       :param conn: the Connection object
+       :param song: name of song
+       :return:
+       """
     cur = conn.cursor()
 
     cur.execute('SELECT tblArtists.Artist,tblSongs.Streams,tblSongs.Rank FROM '
@@ -111,7 +121,12 @@ def select_song_pop(conn, song):
 
 
 def select_tempo(conn, song):
-    # song tempo 'songName'
+    """
+       Query to select song tempo
+       :param conn: the Connection object
+       :param song: name of song
+       :return:
+       """
     cur = conn.cursor()
 
     cur.execute('SELECT Tempo FROM tblSongs WHERE TrackName = "' + song + '"')
@@ -123,7 +138,12 @@ def select_tempo(conn, song):
 
 
 def select_song_artist(conn, song):
-    # song artist 'songName'
+    """
+       Query to select song artist
+       :param conn: the Connection object
+       :param song: name of song
+       :return:
+       """
     cur = conn.cursor()
 
     cur.execute('SELECT ArtistId FROM tblSongs WHERE TrackName = "' + song + '"')
@@ -138,7 +158,12 @@ def select_song_artist(conn, song):
 
 
 def select_by_artist(conn, artist):
-    # artist 'name'
+    """
+       Query to select artist
+       :param conn: the Connection object
+       :param artist: name of artist
+       :return:
+       """
     cur = conn.cursor()
 
     cur.execute('SELECT ArtistId FROM tblArtists WHERE Artist ="' + artist + '"')
@@ -155,7 +180,12 @@ def select_by_artist(conn, artist):
 
 
 def select_artist_pop(conn, name):
-    # artist popularity 'songName'
+    """
+       Query to select artist popularity
+       :param conn: the Connection object
+       :param name: name of artist
+       :return:
+       """
     cur = conn.cursor()
 
     cur.execute('SELECT ArtistPopularity FROM tblArtists WHERE Artist = "'+name+'"')
@@ -167,7 +197,11 @@ def select_artist_pop(conn, name):
 
 
 def select_followers(conn, name):
-    # artist followers 'songName'
+    """
+       Query to select artist popularity
+       :param conn: the Connection object
+       :return:
+       """
     cur = conn.cursor()
 
     cur.execute('SELECT ArtistFollowers FROM tblArtists WHERE Artist = "' + name + '"')
@@ -179,7 +213,12 @@ def select_followers(conn, name):
 
 
 def select_top_x(conn, x):
-
+    """
+       Extra query to select top x songs
+       :param conn: the Connection object
+       :param x: number of songs selected from  highest rank
+       :return:
+       """
     cur = conn.cursor()
 
     cur.execute('SELECT Rank, TrackName FROM tblSongs WHERE Rank <= '+ str(x))
@@ -190,7 +229,10 @@ def select_top_x(conn, x):
 
 
 def main():
-
+    """
+       User interface using all methods.
+       :return:
+       """
     print("Welcome to the spotify database searching tool, for help type 'help'")
     print("You must input 'load_database' first.")
 

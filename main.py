@@ -67,6 +67,7 @@ def load_database():
             conn.commit()
 
         conn.close()
+        print("Done!")
 
 
 def create_connection(db_file):
@@ -191,6 +192,7 @@ def select_top_x(conn, x):
 def main():
 
     print("Welcome to the spotify database searching tool, for help type 'help'")
+    print("You must input 'load_database' first.")
 
     query = input(">> ")
     query = re.findall(r'\w+|\"\w+\s+\w+\"', query)
@@ -199,7 +201,7 @@ def main():
     while query[0] != "quit":
         #check query is valid
         while query[0] not in validQueries:
-            print("Ivalid Query, please try again")
+            print("Invalid Query, please try again")
             query = input(">> ")
             query = re.findall(r'\w+|\"\w+\s+\w+\"', query)
             query = [x.strip('"') for x in query]
@@ -208,10 +210,10 @@ def main():
         if query[0] == "quit":
             print("Thank you for using our program")
         elif query[0] == "load_database":
-            if os.path.isfile(db_file):
-               load_database()
+            load_database()
             conn = create_connection(db_file)
         elif query[0] == "help":
+            print("Artist and song names must be in double quotes.")
             print("song popularity ...")
             print("song artist ...")
             print("song tempo ...")
@@ -226,6 +228,7 @@ def main():
                     select_song_artist(conn, query[2])
                 elif query[1] == "tempo":
                     select_tempo(conn, query[2])
+
             elif query[0] == "artist":
                 if query[1] == "popularity":
                     select_artist_pop(conn, query[2])
@@ -234,7 +237,7 @@ def main():
                 else:
                     select_by_artist(conn, query[1])
         except:
-            print("Error in query")
+            print("Invalid Query, please try again or 'help'")
 
         query = input(">> ")
         query = re.findall(r'\w+|\"\w+\s+\w+\"', query)
